@@ -1,3 +1,10 @@
+## Exploratory Data Analysis - GSS Data
+According to an article published by the [Economic Policy Institute](https://www.epi.org/blog/gender-wage-gap-persists-in-2023-women-are-paid-roughly-22-less-than-men-on-average/), the gender wage gap is still there in 2023. On average, women are paid approximately 21.8% less than men. The study took into account various factors such as race, ethnicity, education, age, and geographic location while comparing the pay gap between men and women in the United States. Additionally, another article by the [Pew Research Center](https://www.pewresearch.org/short-reads/2023/03/01/gender-pay-gap-facts/) also highlights that there has been little change in the pay gap in the U.S. over the past two decades. 
+
+The [General Social Survey](https://gss.norc.org/About-The-GSS) (GSS) is a research organization that  surveys adults in the U.S. since 1972.  According to [Wikipedia](https://en.wikipedia.org/wiki/General_Social_Survey), the GSS was created by the National Opinion Research Center (NORC) at the University of Chicago and is funded by the National Science Foundation.  GSS collects data on demographic, behavioral, attitudinal trends and topics of special interest.  The GSS conducts extensive research to provide high-quality data to scholars, students, policy-makers and other audiences.  The GSS is widely regarded as one of the best sources of data on social trends.
+
+
+
 ## Deploying the Dashboard Using a Free Hosting Service
 If you want to distribute your dashboard to an audience, with a manager, or with a client, sharing a URL that links to the dashboard is better than sharing a notebook or a Python script file. The best free service for hosting dashboards is called [Heroku](https://www.heroku.com/home). It can be challenging to get a dashboard running on Heroku, but once you do, your dashboard will be accessable with a URL of the form *yourappname*.herokuapp.com. For example, the ANES dashboard we designed above is available at https://anespilot2019.herokuapp.com/.
 
