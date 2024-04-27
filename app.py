@@ -139,7 +139,8 @@ fig_box.show(renderer='notebook')
 
 
 # Create app
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app = JupyterDash(__name__, external_stylesheets=external_stylesheets)
+#app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 server = app.server
 
 app.layout = html.Div(
