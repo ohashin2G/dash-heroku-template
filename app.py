@@ -1,5 +1,5 @@
-from dash.exceptions import PreventUpdate
 from dash import Dash, dcc, html, dcc, Input, Output, State, callback
+from dash.exceptions import PreventUpdate
 import random
 import numpy as np
 import pandas as pd
