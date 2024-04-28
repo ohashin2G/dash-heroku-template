@@ -139,8 +139,8 @@ fig_box.show(renderer='notebook')
 
 
 # Create app
-app = JupyterDash(__name__, external_stylesheets=external_stylesheets)
-#app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+#app = JupyterDash(__name__, external_stylesheets=external_stylesheets)
+app = Dash(__name__, external_stylesheets=external_stylesheets)
 server = app.server
 
 app.layout = html.Div(
@@ -274,7 +274,7 @@ barplot = go.Layout(
     barmode='group'
 )
 
-app = Dash(__name__, external_stylesheets=[dbc.themes.CYBORG])
+#app = Dash(__name__, external_stylesheets=[dbc.themes.CYBORG])
 app.layout = html.Div([
     html.Div("Level of Agreement to Traditional Values by Category and Group"),
     # dcc.Graph(id = 'barplot', figure={}, figure=go.Figure(layout=barplot)),
