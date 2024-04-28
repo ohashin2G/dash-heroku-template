@@ -8,18 +8,14 @@ import plotly.express as px
 import plotly.graph_objects as go
 import plotly.figure_factory as ff
 from jupyter_dash import JupyterDash
-#import dash_core_components as dcc
-#from dash import dcc
-#import dash_html_components as html
-#from dash import html
-#from dash.dependencies import Input, Output
+import dash
+from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 # Load GSS Data
 gss = pd.read_csv("https://github.com/jkropko/DS-6001/raw/master/localdata/gss2018.csv",
-                  low_memory=False,
                   encoding='cp1252', na_values=['IAP', 'IAP,DK,NA,uncodeable', 'NOT SURE', 'DK', 'IAP, DK, NA, uncodeable', '.a', "CAN'T CHOOSE"])
 
 mycols = ['id', 'wtss', 'sex', 'educ', 'region', 'age', 'coninc',
@@ -119,7 +115,7 @@ fig2.show()
 
 # Facet Boxplots
 
-# Create a new datagrame that contains `income`, `sex`, and `job_prestige`
+# Create a new dataframe that contains `income`, `sex`, and `job_prestige`
 gss_status = pd.DataFrame(
     gss_clean[['income', 'sex', 'job_prestige']])
 gss_status
@@ -138,10 +134,11 @@ fig_box = px.box(gss_status, x='sex', y='income', color='sex',
 fig_box.update(layout=dict(title=dict(x=0.5)))
 fig_box.show()
 
+################################################
 
 # Create app
 #app = JupyterDash(__name__, external_stylesheets=external_stylesheets)
-app = Dash(__name__, external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 server = app.server
 
 app.layout = html.Div(
@@ -201,10 +198,10 @@ app.layout = html.Div(
     ],  # style={'width': '100%', 'height': '10000', 'margin': '0 auto'}
 )
 
-#####################################
+
+
 # Extra Visualizations
-# Barplot with Two Dropdown Menues
-# Ref: https://dash.plotly.com/dash-core-components/dropdown
+# Mapbox
 
 
 def region2state(region):
@@ -240,93 +237,10 @@ fig_map = px.choropleth(gss_clean, locations='state', locationmode='USA-states',
                         hover_name='state', hover_data=['difference', 'income', 'education', 'age', 'male_breadwinner'],
                         color='difference', scope="usa",
                         title='Difference in Income between Men and Women by State',
-                        labels={'difference': 'wage gap (wider in yellow)'},)
+                        labels={'difference': 'wage gap (wider in yellow)'})
 fig_map.show()
 
-# Create options with selected features
-category = ['satjob', 'relationship', 'male_breadwinner',
-            'men_bettersuited', 'child_suffer', 'men_overwork']
-group = ['sex', 'region', 'education']
-gss_ft = gss_clean[category + group].dropna()
-gss_ft.value_counts().reset_index()
-
-
-df = gss_ft
-options = {
-    'Category': [
-        {"label": "Job Satisfaction", "value": "satjob"},
-        {"label": "Relationship", "value": "relationship"},
-        {"label": "Male Breadwinner", "value": "male_breadwinner"},
-        {"label": "Men Work Women Stay", "value": "men_bettersuited"},
-        {"label": "Child Suffer if Women Work", "value": "child_suffer"},
-    ],
-    'Group': [
-        {'label': 'Sex', 'value': 'sex'},
-        {'label': 'Region', 'value': 'region'},
-        {'label': 'Education', 'value': 'education'}
-    ]
-}
-
-barplot = go.Layout(
-    xaxis={'title': 'Level of Agreement'},
-    yaxis={'title': 'Number of Responses'},
-    title='Level of Agreement to Traditional Values',
-    barmode='group'
-)
-
-app = Dash(__name__, external_stylesheets=external_stylesheets)
-app.layout = html.Div([
-    html.Div("Level of Agreement to Traditional Values by Category and Group"),
-    dcc.Graph(id='barplot', figure={},),
-
-    html.Div([
-        "Category",
-        dcc.Dropdown(options=options['Category'],  id='dropdown-category')
-    ]),
-    html.Div([
-        "Group by",
-        dcc.Dropdown(options=options['Group'], id='dropdown-group'),
-    ]),
-])
-
-
-@app.callback(
-    Output('dropdown-category', 'options'),
-    Input('dropdown-category', 'search_value'),
-)
-def update_options(search_value):
-    if not search_value:
-        raise PreventUpdate
-    return [o for o in options if search_value in o["label"]]
-
-
-@app.callback(
-    Output('dropdown-group', 'options'),
-    Input('dropdown-group', 'search_value'),
-    State('dropdown-group', 'value')
-)
-def update_options2(search_value, value):
-    if not search_value:
-        raise PreventUpdate
-    return [
-        o for o in options if search_value in o["label"] or o["value"] in (value or [])
-    ]
-
-
-@callback(
-    Output('barplot', 'figure'),
-    Input('dropdown-category', 'value'),
-    Input('dropdown-group', 'value')
-)
-def update_graph(category, group):
-    if category is None or group is None:
-        raise PreventUpdate
-    df = gss_ft
-    df = df.groupby([group, category]).size().reset_index(name='count')
-    fig = px.bar(df, x=category, y='count', color=group, barmode='group')
-    fig.update_layout(barplot)
-    return fig
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False, port=8056)
