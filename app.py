@@ -1,3 +1,4 @@
+import dash
 from dash import Dash, dcc, html, dcc, Input, Output, State, callback
 from dash.exceptions import PreventUpdate
 import random
@@ -6,19 +7,19 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import plotly.figure_factory as ff
-import dash
 from jupyter_dash import JupyterDash
 #import dash_core_components as dcc
 #from dash import dcc
 #import dash_html_components as html
 #from dash import html
-from dash.dependencies import Input, Output
+#from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 # Load GSS Data
 gss = pd.read_csv("https://github.com/jkropko/DS-6001/raw/master/localdata/gss2018.csv",
+                  low_memory=False,
                   encoding='cp1252', na_values=['IAP', 'IAP,DK,NA,uncodeable', 'NOT SURE', 'DK', 'IAP, DK, NA, uncodeable', '.a', "CAN'T CHOOSE"])
 
 mycols = ['id', 'wtss', 'sex', 'educ', 'region', 'age', 'coninc',
@@ -135,7 +136,7 @@ fig_box = px.box(gss_status, x='sex', y='income', color='sex',
                          'income': 'Income', 'sex': 'Sex'},
                  title="Income vs Occupational Prestige by Sex")
 fig_box.update(layout=dict(title=dict(x=0.5)))
-fig_box.show(renderer='notebook')
+fig_box.show()
 
 
 # Create app
@@ -200,8 +201,10 @@ app.layout = html.Div(
     ],  # style={'width': '100%', 'height': '10000', 'margin': '0 auto'}
 )
 
+#####################################
 # Extra Visualizations
-# Mapbox
+# Barplot with Two Dropdown Menues
+# Ref: https://dash.plotly.com/dash-core-components/dropdown
 
 
 def region2state(region):
@@ -240,7 +243,6 @@ fig_map = px.choropleth(gss_clean, locations='state', locationmode='USA-states',
                         labels={'difference': 'wage gap (wider in yellow)'},)
 fig_map.show()
 
-# Two pulldown menus
 # Create options with selected features
 category = ['satjob', 'relationship', 'male_breadwinner',
             'men_bettersuited', 'child_suffer', 'men_overwork']
@@ -248,8 +250,6 @@ group = ['sex', 'region', 'education']
 gss_ft = gss_clean[category + group].dropna()
 gss_ft.value_counts().reset_index()
 
-# Barplot with Multi-Value Dropdown
-# Ref: https://dash.plotly.com/dash-core-components/dropdown
 
 df = gss_ft
 options = {
@@ -274,10 +274,9 @@ barplot = go.Layout(
     barmode='group'
 )
 
-#app = Dash(__name__, external_stylesheets=[dbc.themes.CYBORG])
+app = Dash(__name__, external_stylesheets=external_stylesheets)
 app.layout = html.Div([
     html.Div("Level of Agreement to Traditional Values by Category and Group"),
-    # dcc.Graph(id = 'barplot', figure={}, figure=go.Figure(layout=barplot)),
     dcc.Graph(id='barplot', figure={},),
 
     html.Div([
@@ -330,4 +329,4 @@ def update_graph(category, group):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True, port='8052')
+    app.run_server(debug=True)
