@@ -291,8 +291,8 @@ app.layout = html.Div([
 ])
 
 
-@callback(
-    Output('dropdown-category', 'category'),
+@app.callback(
+    Output('dropdown-category', 'options'),
     Input('dropdown-category', 'search_value'),
 )
 def update_options(search_value):
@@ -301,8 +301,8 @@ def update_options(search_value):
     return [o for o in options if search_value in o["label"]]
 
 
-@callback(
-    Output('dropdown-group', 'group'),
+@app.callback(
+    Output('dropdown-group', 'options'),
     Input('dropdown-group', 'search_value'),
     State('dropdown-group', 'value')
 )
