@@ -8,3 +8,7 @@ numpy>=1.18.1
 pandas>=1.0.5
 requests>=2.24.0
 statsmodels>=0.11.0
+django>=5.0,<5.1
+gunicorn>=22,<23
+dj-database-url>=2,<3
+whitenoise[brotli]>=6,<7
