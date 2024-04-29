@@ -7,7 +7,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import plotly.figure_factory as ff
-# from jupyter_dash import JupyterDash
+from jupyter_dash import JupyterDash
 import dash
 from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
@@ -137,8 +137,8 @@ fig_box.show()
 ################################################
 
 # Create app
-#app = JupyterDash(__name__, external_stylesheets=external_stylesheets)
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app = JupyterDash(__name__, external_stylesheets=external_stylesheets)
+#app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 server = app.server
 
 app.layout = html.Div(
